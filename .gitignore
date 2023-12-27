@@ -1,0 +1,10 @@
+# created by virtualenv automatically
+Lib/
+Scripts/
+*.pyc
+*.pyo
+**__pycache__/
+
+#ignore .env files inside the spotify and youtube module
+**/.env
+
