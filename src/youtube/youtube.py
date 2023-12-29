@@ -1,12 +1,5 @@
-
-import os
 import csv
-from dotenv import load_dotenv
 from googleapiclient.discovery import build
-
-
-load_dotenv()
-API_KEY = os.getenv('API_KEY')
 
 
 def build_youtube_key(api_key: str):
@@ -17,7 +10,7 @@ def build_youtube_key(api_key: str):
     - api_key (str) : the key for the API
     
     """
-    return build('youtube', 'v3', developerKey = API_KEY)
+    return build('youtube', 'v3', developerKey = api_key)
 
 
 def get_result(response) -> dict:
@@ -44,7 +37,7 @@ def get_result(response) -> dict:
     return results  
 
 
-def write_to_file(search_result: dict, playlist_name: str):
+def save_results_to_file(search_result: dict, playlist_name: str):
     """
     This function writes the the title and YouTube links of the tracks in the playlist to a '.csv' file
     
@@ -66,8 +59,9 @@ def write_to_file(search_result: dict, playlist_name: str):
         writer.writerow({'title':title, 'link':link})
 
 
-def main():
-    youtube_key = build_youtube_key(API_KEY)
+def main(api_key):
+
+    youtube_key = build_youtube_key(api_key)
 
     search_list = []
     playlist_name = input('Name of the playlist: ')
@@ -83,8 +77,9 @@ def main():
 
         response = request.execute()
         links = get_result(response)
-        write_to_file(links, playlist_name)
+        save_results_to_file(links, playlist_name)
 
 
 if __name__ == '__main__':
-    main()
+    from ..config.env import YOUTUBE_API_KEY
+    main(YOUTUBE_API_KEY)

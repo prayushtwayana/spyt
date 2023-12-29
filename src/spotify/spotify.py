@@ -1,24 +1,18 @@
-
 import json
+import sys
+import re
 import base64
-import os
-from dotenv import load_dotenv
 from requests import post, get
 
 
-load_dotenv()
-client_id = os.getenv("CLIENT_ID")
-client_secret = os.getenv("CLIENT_SECRET")
-
-
-def get_token() -> str:
+def get_token(CLIENT_ID: str, CLIENT_SECRET: str) -> str:
     """
     This function requests access token to the API service provider and returns the access token.
     This access token is crucial for making any requests to the API.
     For each request to the API the access token is necessary.
 
     """
-    auth_string = client_id + ":" + client_secret
+    auth_string = CLIENT_ID + ":" + CLIENT_SECRET
     auth_bytes = auth_string.encode("utf-8")
     auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
 
@@ -58,6 +52,48 @@ def get_playlist_link() -> str:
     """
     playlist_link = input("Enter a spotify playlist link: ")
     return playlist_link
+
+
+def is_playlist_link(link: str) -> bool:
+    """
+    This function confirms whether the entered link is infact a valid Spotify Playlist Link
+
+    pararmeters:
+    - link (str) : the link obtained from get_playlist_link function
+
+    """
+    link = link.strip()
+
+    if not re.search(r".*(?:https?://)?(?:open\.)?spotify\.com/playlist/([a-zA-Z\d]{22})\?si=([a-zA-Z\d]{16})$", link):
+        return False
+
+    return True
+
+
+def identify_link(link: str):
+    """
+    This function informs the user about the type of link they have provided should the link be not a Spotify Playlist Link
+
+    parameters:
+    - link (str) : the link obtained from get_playlist_link function
+    
+    """
+    link = link.strip()
+
+    if re.search(r".*(?:https?://)?(?:open\.)?spotify\.com/track/([a-zA-Z\d]{22})\?si=([a-zA-Z\d]{16})$", link):
+        return "track"
+
+    if re.search(r".*(?:https?://)?(?:open\.)?spotify\.com/episode/([a-zA-Z\d]{22})\?si=([a-zA-Z\d]{16})$", link):
+        return "episode"
+
+    if re.search(r".*(?:https?://)?(?:open\.)?spotify\.com/artist/([a-zA-Z\d]{22})\?si=([a-zA-Z\d_]{22})$", link):
+        return "artist"
+
+    if re.search(r".*(?:https?://)?(?:open\.)?spotify\.com/album/([a-zA-Z\d]{22})\?si=([a-zA-Z\d]{22})$", link):
+        return "album"
+
+    if re.search(r".*(?:https?://)?(?:open\.)?spotify\.com/show/([a-zA-Z\d]{22})\?si=([a-zA-Z\d]{16})$", link):
+        return "show"
 
 
 def get_playlist_id(playlist_link: str) -> str:
@@ -159,9 +195,12 @@ def count_items(my_list: list) -> int:
     return count
 
 
-def main():
-    token = get_token()
-    playlist_link = get_playlist_link()
+def main(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET):
+    token = get_token(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)
+    playlist_link = get_playlist_link()        
+    if not is_playlist_link(playlist_link):
+        if identify_link(playlist_link) == None: sys.exit("Invalid Input")
+        sys.exit(f"The link is a {identify_link(playlist_link)} link.")
     playlist_id = get_playlist_id(playlist_link)
     tracks = get_playlist_tracks(token, playlist_id)
     artists = get_playlist_artist(token, playlist_id)
@@ -169,4 +208,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from ..config.env import SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET
+    main(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)
