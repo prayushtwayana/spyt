@@ -178,23 +178,6 @@ def get_optimized_search(tracks: list, artists: list) -> list:
     return tracks
 
 
-def count_items(my_list: list) -> int:
-    """
-    This function counts the number of items in a list
-    It is used to check the length of the Track list and Artist list
-    This function is created just for testing
-
-    parameters:
-    - my_list (list) : the track or aritst list
-
-    """
-    count = 0
-    for item in my_list:
-        count = count + 1
-
-    return count
-
-
 def main(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET):
     token = get_token(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)
     playlist_link = get_playlist_link()        
