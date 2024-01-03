@@ -113,6 +113,15 @@ def get_playlist_id(playlist_link: str) -> str:
 
 
 def get_playlist_name(token:str, playlist_id:str):
+    """
+    This function returns the name of the playlist
+    This name will be used as the name of the file when the results are stored locally
+
+    parameters:
+    - token (str) : token from earlier
+    - playlist_id (str) : id of the playlist extracted from playlist link 
+       
+    """
     url = f"https://api.spotify.com/v1/playlists/{playlist_id}"
     headers = get_auth_header(token)
     result = get(url, headers=headers)
@@ -200,6 +209,7 @@ def main(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET):
     artists = get_playlist_artist(token, playlist_id)
     optimized_search = get_optimized_search(tracks, artists)
 
+    print(playlist_name)
 
 
 if __name__ == "__main__":
