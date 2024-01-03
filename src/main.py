@@ -16,7 +16,7 @@ def main():
 
     youtube_key = youtube.build_youtube_key(YOUTUBE_API_KEY)
     search_list = optimized_search
-    playlist_name = input("Name of the playlist: ")
+    playlist_name = spotify.get_playlist_name(token, playlist_id)
     for search_query in search_list:
         request = youtube_key.search().list(
             part = 'snippet',

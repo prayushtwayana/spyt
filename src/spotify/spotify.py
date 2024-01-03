@@ -112,6 +112,16 @@ def get_playlist_id(playlist_link: str) -> str:
     return playlist_id
 
 
+def get_playlist_name(token:str, playlist_id:str):
+    url = f"https://api.spotify.com/v1/playlists/{playlist_id}"
+    headers = get_auth_header(token)
+    result = get(url, headers=headers)
+
+    playlist_name = json.loads(result.content)['name']
+
+    return playlist_name
+
+
 def get_playlist_tracks(token: str, playlist_id: str) -> list:
     """
     This function returns the track names of the playlist
@@ -123,8 +133,8 @@ def get_playlist_tracks(token: str, playlist_id: str) -> list:
     """
     url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
     headers = get_auth_header(token)
-
     result = get(url, headers=headers)
+
     json_result = json.loads(result.content)["items"]
     track = [item['track']['name'] for item in json_result]
 
@@ -143,8 +153,8 @@ def get_playlist_artist(token: str, playlist_id: str) -> list:
     """
     url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
     headers = get_auth_header(token)
-
     result = get(url, headers=headers)
+
     json_result = json.loads(result.content)["items"]
     artists_list = [item['track']['artists'] for item in json_result]
 
@@ -185,9 +195,11 @@ def main(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET):
         if identify_link(playlist_link) == None: sys.exit("Invalid Input")
         sys.exit(f"The link is a {identify_link(playlist_link)} link.")
     playlist_id = get_playlist_id(playlist_link)
+    playlist_name = get_playlist_name(token, playlist_id)
     tracks = get_playlist_tracks(token, playlist_id)
     artists = get_playlist_artist(token, playlist_id)
     optimized_search = get_optimized_search(tracks, artists)
+
 
 
 if __name__ == "__main__":
