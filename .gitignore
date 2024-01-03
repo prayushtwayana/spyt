@@ -8,3 +8,5 @@ Scripts/
 #ignore .env files inside the spotify and youtube module
 **/.env
 
+#ignore the .txt file 
+TORUNPACKAGE.txt
