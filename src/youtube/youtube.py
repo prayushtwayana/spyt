@@ -37,7 +37,7 @@ def get_result(response) -> dict:
     return results  
 
 
-def save_results_to_file(search_result: dict, playlist_name: str):
+def save_results_to_file(search_result: dict, file_name: str):
     """
     This function writes the the title and YouTube links of the tracks in the playlist to a '.csv' file
     
@@ -45,9 +45,6 @@ def save_results_to_file(search_result: dict, playlist_name: str):
     - search_result (dict) : a list of all the tracks in a playlist
     - playlist_name (str) : the name of the playlist for `spyt` (the name will be used for the file name as well)
     """
-
-    file_name = playlist_name + '.csv'
-
     title, link = str, str
 
     search_result_tuple = tuple(search_result.items())
