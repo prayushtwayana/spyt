@@ -8,7 +8,7 @@ def build_youtube_key(api_key: str):
 
     parameters:
     - api_key (str) : the key for the API
-    
+
     """
     return build('youtube', 'v3', developerKey = api_key)
 
@@ -34,13 +34,13 @@ def get_result(response) -> dict:
         results.update(
             {title_instance: f"https://youtu.be/watch?v={id_instance}"})
 
-    return results  
+    return results
 
 
 def save_results_to_file(search_result: dict, file_name: str):
     """
     This function writes the the title and YouTube links of the tracks in the playlist to a '.csv' file
-    
+
     parameters:
     - search_result (dict) : a list of all the tracks in a playlist
     - playlist_name (str) : the name of the playlist for `spyt` (the name will be used for the file name as well)
