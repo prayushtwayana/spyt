@@ -25,5 +25,5 @@ For Spotify, go to the official [Spotify API website](https://developer.spotify.
 To clone the repository, in your terminal run the command
 
 ```
-https://github.com/prayushtwayana/spyt.git
+git clone https://github.com/prayushtwayana/spyt.git
 ```
